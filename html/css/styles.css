@@ -1,0 +1,62 @@
+* {
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.window-container {
+    height: calc(100% - 50px);
+    width: 100%;
+    overflow-x: scroll;
+}
+
+.window-component {
+    height: 100%;
+    width: 100%;
+}
+
+.panel-visible {
+    /*left: 200px;*/
+    width: calc(100% - 300px); 
+    float: left;
+}
+
+.search-show { 
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 5px;
+}
+
+.search-hide { 
+    display: none;
+}
+
+.right-panel {
+    width: 300px;
+    padding-left: 5px;
+    background-color: #f8f8f8;
+    float: left;
+    height: 100%;
+}
+
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.link {
+    fill: none;
+    stroke: #bbb;
+}
+
+/** bootstrap override **/
+.navbar {
+    margin-bottom: 0px;
+    border: 0px;
+}
+

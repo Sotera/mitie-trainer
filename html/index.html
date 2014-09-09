@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>/</title>
+    <link href= "css/bootstrap.min.css" rel= "stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class= "navbar navbar-default" role= "navigation">
+      <div class= "container-fluid">
+        <div class= "navbar-header">
+          <a class= "navbar-brand" href= "#"></a>
+        </div>
+        <form class= "navbar-form navbar-right">
+          <span data-bind="click: panelToggle" style= "font-size: 25px; color: #777;" class= "glyphicon glyphicon-th-list"></span>
+        </form>
+      </div>
+    </header>
+    <div class= "window-container">
+      <div id= "widget-canvas" data-bind="css: cssBodyView"></div>
+      <div class= "info-panel"></div>
+    </div>
+    <script data-main="js/app/main-app" src="js/lib/require-min.js"></script>
+  </body>
+</html>
