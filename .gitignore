@@ -1,1 +1,7 @@
 *.pyc
+html/data/models/*
+!html/data/models/.keep
+html/data/trained/
+!html/data/trained/.keep
+html/data/training/
+!html/data/training/.keep
