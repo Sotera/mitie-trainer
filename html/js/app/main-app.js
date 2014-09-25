@@ -7,6 +7,7 @@ requirejs.config({
     'text' : 'lib/text',
     'jquery' : 'lib/jquery-2.1.1.min',
     'bootstrap' : 'lib/bootstrap.min',
+    'bootstrap.colorpicker' : 'lib/bootstrap-colorpicker',
     'underscore': 'lib/underscore-min',
     'underscore-contrib' : 'lib/underscore-contrib.min',
     'ko' : 'lib/knockout-3.2.0.min',
@@ -22,6 +23,10 @@ requirejs.config({
     'bootstrap': {
       deps: ['jquery'],
       exports: '$.fn.popover'
+    },
+    'bootstrap.colorpicker': {
+      deps: ['bootstrap'],
+      exports: '$.fn.colorpicker'
     },
     'underscore': {
       exports: '_.map'
@@ -43,24 +48,14 @@ requirejs.config({
   }
 });
 
+//prevent context menu
+document.oncontextmenu = function(){ return false; };
 
-requirejs(['underscore-contrib', 'jquery', 'crossroads', 'hasher', 'ko'], function(_, $, crossroads, hasher, ko){
+requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/routes', 'app/data', 'jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, routes, data, $){
 
-  var containerViewModel = (function(){
-    var open = ko.observable(false);
-    return {
-      panelToggle : function(){
-        open(!open());
-      },
-      cssBodyView : ko.pureComputed(function(){
-        return open() ? "window-component panel-visible" : "window-component";
-      })
-    };
-  }());
+  ko.applyBindings(main_window, $('body')[0]);
 
-  ko.applyBindings(containerViewModel, $('body')[0]);
-
-  var DEFAULT_HASH = 'home';
+  var DEFAULT_HASH = routes.HOME();
 
   function setHashSilently(hash){
     hasher.changed.active = false; //disable changed signal
@@ -76,9 +71,24 @@ requirejs(['underscore-contrib', 'jquery', 'crossroads', 'hasher', 'ko'], functi
     crossroads.parse(newHash);
   }
 
+
   //setup crossroads
   crossroads.addRoute('/home', function(){
+    $('#widget-canvas').empty();
+    var el = $('<div>').appendTo($('#widget-canvas'));
+    require(['app/home-view'], function(home){
+      home.render(el);
+    });
+  });
 
+  crossroads.addRoute('/train/{id}', function(id){
+    $('#widget-canvas').empty();
+    var el = $('<div>')
+      .appendTo($('#widget-canvas'));
+
+    require(['app/markup'], function(markup){
+      markup.render(el, id);
+    });
   });
 
   crossroads.routed.add(function(req, data){

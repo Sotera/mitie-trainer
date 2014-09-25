@@ -1,0 +1,62 @@
+<div style="float: right;">
+  <span class="glyphicon glyphicon-remove" data-bind="click: close"></span>
+</div>
+<div style="padding-bottom: 15px;"> 
+  <label style="font-weight: bold;width: 50px;"> Entity </label> 
+  <div style="display: inline-block;padding: 5px;border-radius: 5px;" class="pad-child" data-bind="html: entity, style: { 'background-color': selectedType().color }"> </div> 
+</div>
+
+
+<div style="padding-bottom: 15px;"> 
+  <label style="font-weight: bold;width: 50px;"> Type </label> 
+  <div class="btn-group">
+    <a class="btn dropdown-toggle" 
+       data-toggle="dropdown" 
+       style="text-decoration: none;color: #000"
+       data-bind="style: { 'background-color': selectedType().color }">
+      <span style="text-transform: capitalize;" data-bind="text: selectedType().text"></span> 
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" data-bind= "foreach: entityTypes">
+      <li>
+        <a tabindex="-1" data-bind= "click: $parent.setTypeSelected($data)"> 
+          <div style="display: inline-block;height:10px;width:10px;" data-bind= "style: { 'background-color': $data.color }" />
+          <span style="text-transform: capitalize;" 
+                data-bind="text: $data.text" />
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div>
+  <button type="submit" class="btn btn-primary" data-bind= "click: save">Tag</button>
+  <button type="submit" class="btn btn-danger" data-bind= "visible: displayRemove, click: remove">Remove</button>
+</div>
+
+<hr />
+
+
+<h4>Add an Entity Type</h4>
+
+
+
+<div style="padding-bottom: 15px;"> 
+  <label style="font-weight: bold;width: 50px;">Name:</label> 
+  <div style="display: inline-block;vertical-align: bottom;">
+    <input type="text" data-bind="value: newName" ></input>
+  </div>
+</div>
+
+<div style="padding-bottom: 15px;"> 
+  <label style="font-weight: bold;width: 50px;">Color:</label> 
+  <div style="display: inline-block;vertical-align: bottom;" data-color="#ffffff" data-color-format="hex" id="cp">
+    <div style="display: inline-block;height: 20px;width: 20px;border: 1px solid #000;" data-bind="style: {'background-color': newColor }" />
+  </div>
+</div>
+
+<div>
+  <button type="submit" class="btn btn-primary" data-bind= "click: addEntityType">Add</button>
+</div>
+
+

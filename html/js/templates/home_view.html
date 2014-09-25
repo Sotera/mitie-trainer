@@ -1,0 +1,62 @@
+
+
+<div style="margin: 10px;">
+
+  <div>
+    <div style="margin-left: 10px;">
+      <div style="display:inline-block;padding-right: 20px;vertical-align: top;">
+        <h4>Training Samples</h4>
+      </div>
+    </div>
+
+    <div style="padding: 24px 10px; display:inline-block;vertical-align: top;">
+      <span> Total: </span>
+    </div>
+    <div style="display:inline-block;padding-right: 20px;">
+      <span style="font-size: 54px" data-bind="html: total"></span>
+    </div>
+    <div style="padding: 24px 10px; display:inline-block;vertical-align: top;">
+      <span> Trained: </span>
+    </div>
+    <div style="display:inline-block;padding-right: 20px;">
+      <span style="font-size: 54px" data-bind="html: trained"></span>
+    </div>
+
+    <div style="display:inline-block;margin-right: 20px;">
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default" data-bind="click: train">Train</button>
+      </div>
+      
+      <div>
+        <button class="btn btn-default" data-bind="click: save">Save</button>
+        <!-- saved message -->
+        <div style="display: inline-block; color: blue;padding-left: 20px; display:none;"> testing </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+
+  <div class="table-container"></div>
+
+  <!-- 
+  configure entity options
+  stats (how many sentences are trained )
+  actions - train | save model
+  (test training against sample)
+    --> 
+
+  
+  <!-- table of training data 
+       id | snippet of sentence | trained or not trained check box
+       icon
+
+      add more, delete 
+
+      row click navigate to #/markup/{id} loads this sentence and
+    highlights trained data if any 
+    --> 
+
+
+</div>

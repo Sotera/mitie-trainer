@@ -1,5 +1,4 @@
 * {
-    overflow: hidden;
     overflow-wrap: break-word;
 }
 
@@ -12,6 +11,7 @@ html, body {
 .window-container {
     height: calc(100% - 50px);
     width: 100%;
+    overflow: hidden;
     overflow-x: scroll;
 }
 
@@ -38,10 +38,15 @@ html, body {
 
 .right-panel {
     width: 300px;
-    padding-left: 5px;
+    padding: 5px;
     background-color: #f8f8f8;
     float: left;
     height: 100%;
+    
+}
+
+.right-panel > div {
+    margin: 5px;
 }
 
 .node {
@@ -54,9 +59,95 @@ html, body {
     stroke: #bbb;
 }
 
+.markup-container {
+    margin: 10px;
+}
+.markup-container > span {
+    padding-right: 5px;
+}
+
+.table-container {
+    margin-left: 10px;
+}
+
+.table-container > table thead {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.table-container > table tbody tr:first-child td {
+    padding-top: 8px;
+}
+
+.table-container > table tbody tr td {
+    text-align: center;
+}
+
+.table-container > table tbody tr td:nth-child(2) {
+    min-width: 500px;
+    text-align: left;
+}
+
+
+.table-container > table tr th {
+    margin: 5px;
+    padding: 2px 15px 5px 0px;
+}
+
+.table-container > table tr.hover td {
+    background-color: #ffffae;
+}
+
+.table-container > table tr td {
+    margin: 5px;
+    padding: 0px 15px 5px 0px;
+}
+
+.tag {
+    font-weight: bold;
+    font-size: larger;
+    display: inline-block;
+    vertical-align: bottom;    
+    margin-right: 2px;
+    padding-left: 5px;
+    border-radius: 5px;
+}
+
+.tag>span {
+    padding-right: 5px;
+}
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+    font-size: larger;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.highlight>span {
+    padding-right: 5px;
+}
+
+.pad-child>span {
+    padding-right: 5px;
+}
+
+*.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+
+
 /** bootstrap override **/
 .navbar {
     margin-bottom: 0px;
     border: 0px;
 }
 
+.popover {
+    overflow: visible;
+}
