@@ -1,6 +1,7 @@
 from trainer.utils.functions import nth, rest, head
 
 import sys, os
+import datetime
 import tangelo
 import cherrypy
 import json
@@ -55,7 +56,7 @@ def train(*args, **kwargs):
 def save(*args):
     global ner
     name = "{}_{}".format(fmtNow(), "ner_model.dat")    
-    ner.save_to_disk("{}/".format(trained_dir, name))
+    ner.save_to_disk("{}/{}".format(trained_dir, name))
     tangelo.content_type("application/json")
     return { 'model': "{}/{}".format("data/trained", name)}
 
@@ -65,19 +66,16 @@ def test(*args, **kwargs):
     sz = kwargs.get("sample")
     tokens = tokenize_with_offsets(sz)
     entities = ner.extract_entities(tokens)
-    entity_text = ",".join(
-        ["{}:{}:{}".format(
-            str([i for i in e[0]]), 
-            e[1], 
-            " ".join([tokens[i][0] for i in e[0]]))
-         for e in entities])
+    entity_results = [
+        {'tag': e[1], 'indices': [i for i in e[0]], 'text': " ".join([tokens[i][0] for i in e[0]])}
+         for e in entities]
 
     # for e in entities:
     #     range = e[0]
     #     tag = e[1]
     #     entity_text = entity_text + " ".join(tokens[i][0] for i in range)
     tangelo.content_type("application/json")
-    return {'results': entity_text}
+    return { 'tokens': tokens, 'results': entity_results }
 
  
 #GET /train/sample

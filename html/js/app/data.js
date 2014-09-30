@@ -1,4 +1,4 @@
-define(['underscore-contrib'], function(_){
+define(['underscore-contrib', 'jquery'], function(_, $){
 
   var data = [];
 
@@ -35,19 +35,38 @@ define(['underscore-contrib'], function(_){
                             });
   };
 
-  //test
-  var sample = ['My name is Davis King and I work for MIT.',
-                'I met with John Becker at HBU',
-                'I met with Jim at Harvard' ];
-  _.each(sample, addSample);
-  addTag(0, 3, 5, "person");  
-  addTag(1, 3, 5, "person");    
+  var trainings = function(){
+    return data;
+  };
+
+  var bulkload = function(j){
+    data = j.slice(0);
+  };
+
+  var load = function(){
+    var deferred = new $.Deferred();
+    $.get('data/all', function(resp){
+      data = resp.data;
+      deferred.resolve(data);
+    });
+    return deferred.promise();
+  };
+
+  // //test
+  // var sample = ['My name is Davis King and I work for MIT.',
+  //               'I met with John Becker at HBU',
+  //               'I met with Jim at Harvard' ];
+  // _.each(sample, addSample);
+  // addTag(0, 3, 5, "person");  
+  // addTag(1, 3, 5, "person");    
 
   return {
     addSample : addSample,
     addTag : addTag,
     clearTags : clearTags,
     removeTag : removeTag,
-    trainings : data
+    trainings : trainings,
+    init : load,
+    bulkload : bulkload
   }
 });

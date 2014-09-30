@@ -59,6 +59,10 @@ html, body {
     stroke: #bbb;
 }
 
+.btn-size { 
+    width: 150px;
+}
+
 .markup-container {
     margin: 10px;
 }
@@ -104,7 +108,6 @@ html, body {
 
 .tag {
     font-weight: bold;
-    font-size: larger;
     display: inline-block;
     vertical-align: bottom;    
     margin-right: 2px;
@@ -119,7 +122,6 @@ html, body {
 .highlight {
     background-color: yellow;
     font-weight: bold;
-    font-size: larger;
     display: inline-block;
     vertical-align: bottom;
 }
@@ -140,7 +142,19 @@ html, body {
    user-select: none;
 }
 
+.sample_input:before {
+    font-size: 12px;
+    font-weight: 700;
+    color: #959595;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    content: "Sample Input";
+}
 
+.text_tokens > div {
+    border: 1px solid #000;
+    margin: 2px;
+}
 
 /** bootstrap override **/
 .navbar {

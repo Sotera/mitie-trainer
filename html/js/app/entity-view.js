@@ -26,12 +26,12 @@ define(['underscore-contrib', 'jquery', 'windows', 'ko', 'app/main-window'], fun
     container.empty();
     var ref = $('<div>').appendTo(container);
     var save = function(){
-      main_window.panelToggle();
+      //main_window.panelToggle();
       model.onSave(selectedType().text);
     };
 
     var close= function(){
-      main_window.panelToggle();      
+      //main_window.panelToggle();      
     };
 
     var remove = function(){

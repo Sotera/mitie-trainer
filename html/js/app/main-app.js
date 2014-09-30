@@ -14,7 +14,7 @@ requirejs.config({
     'd3' : 'lib/d3.min',
     'signals' : 'lib/signals.min',
     'crossroads' : 'lib/crossroads.min',
-    'hasher' : 'lib/hasher.min'
+    'hasher' : 'lib/hasher'
   },
   shim: {
     'jquery': {
@@ -51,9 +51,10 @@ requirejs.config({
 //prevent context menu
 document.oncontextmenu = function(){ return false; };
 
-requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/routes', 'app/data', 'jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, routes, data, $){
+requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/utils','app/routes', 'app/data', 'jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, utils, routes, data, $){
 
   ko.applyBindings(main_window, $('body')[0]);
+  data.init();
 
   var DEFAULT_HASH = routes.HOME();
 
@@ -73,9 +74,12 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
 
 
   //setup crossroads
-  crossroads.addRoute('/home', function(){
+  crossroads.addRoute('/home/:reload:', function(reload){
     $('#widget-canvas').empty();
-    var el = $('<div>').appendTo($('#widget-canvas'));
+    if (reload){
+      utils.navigate(routes.HOME());
+    };
+    var el = $('<div>', { "style": "height: 100%;"}).appendTo($('#widget-canvas'));
     require(['app/home-view'], function(home){
       home.render(el);
     });
@@ -83,13 +87,21 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
 
   crossroads.addRoute('/train/{id}', function(id){
     $('#widget-canvas').empty();
-    var el = $('<div>')
-      .appendTo($('#widget-canvas'));
+    var el = $('<div>', { "style": "height: 100%;overflow: scroll;"}).appendTo($('#widget-canvas'));
 
     require(['app/markup'], function(markup){
       markup.render(el, id);
     });
   });
+
+  
+  crossroads.addRoute('/test/:id:', function(id){
+    $('#widget-canvas').empty();
+    var el = $('<div>', { "style": "height: 100%;"}).appendTo($('#widget-canvas'));
+    require(['app/test'], function(test){
+      test.render(el, id);
+    });
+  })
 
   crossroads.routed.add(function(req, data){
     console.log('routed: ' + req);

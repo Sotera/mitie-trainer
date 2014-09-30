@@ -55,7 +55,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
   var span_click_handler = function(highlightEl, span){
     var right = span.nextAll().first();
     var left = span.prevAll().first();
-    main_window.panelClose();
+    //main_window.panelClose();
 
     // start new highlight
     if (_.not(_.some(highlightEl)) && _.not(span.parent().hasClass("tag"))){
@@ -153,9 +153,10 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       var container = el.find(".markup-container").first();
 
       container.append(
-        _.map(data.trainings[i].tokens,
-              function(str, i){ return $('<span>').html(str).attr("data-index", i);
-                       }));
+        _.map(data.trainings()[i].tokens,
+              function(part, i){ 
+                return $('<span>').html(_.first(part)).attr("data-index", i);
+              }));
 
       //#global ref
       $('#widget-canvas').mousedown(mousedown_handler);
@@ -166,7 +167,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
         });
       });
 
-      _.each(data.trainings[i].tags, function(tag){
+      _.each(data.trainings()[i].tags, function(tag){
         var spans = _.filter(el.find('span'), function(e){
           var i = parseInt($(e).attr('data-index'));
           return _.every(
@@ -190,6 +191,8 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
     });
 
 
+    main_window.panelRef.empty();
+    main_window.panelOpen();
   };
 
   return {

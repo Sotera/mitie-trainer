@@ -1,0 +1,45 @@
+
+<div style="margin: 10px;height:100%;">
+
+  <div style="margin: 10px;" class="sample_input">
+    <textarea class="form-control" rows="3" 
+              data-bind="value: sample_text, valueUpdate: 'afterkeydown'"></textarea>
+  </div>
+
+
+  <div style="margin: 10px;display: inline-block">
+    <button class="btn btn-default" data-bind="click: test_handler">Test</button>
+  </div>
+  <div style="margin: 10px;display: inline-block">
+    <button class="btn btn-default" data-bind="click: home_handler">Home</button>
+  </div>
+
+  <script type="text/html" id="result-template">
+    <div>
+      <div style="display: inline-block;padding-right: 10px;width: 100px;" 
+           data-bind="html: indices"></div>
+
+      <div style="display: inline-block;padding-left: 2px;padding-right: 10px;text-transform: capitalize;width:100px;" 
+           data-bind="css: tag, html: tag, event: { mouseover: $root.highlightTokens($data), mouseout: $root.unhighlightTokens($data) }">
+      </div>
+
+      <div style="display: inline-block;padding-right: 10px;" 
+           data-bind="html: text"></div>
+    </div>
+  </script>
+
+  <div style="margin: 10px;">
+    <h4>Tagged</h4>
+    <div style="height: 250px;overflow: scroll;" data-bind="template: { name: 'result-template', foreach: text_results }"></div>
+    <hr/>
+    <h4>Tokens</h4>
+    <div class="text_tokens" data-bind="foreach: tokens" style="height: 200px;overflow: scroll;">
+      <div style="display: inline-block" data-bind="css: 'idx_'+$index()">
+        <div style="margin-left: 14px;margin-right: 14px;margin-top:4px;" data-bind="html: $data[0]"></div>
+        <div style="float:left; font-size: 10px;" data-bind="html: $index"></div>
+        <div style="float:right;font-size: 10px;" data-bind="html: $data[1]"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
