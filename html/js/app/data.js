@@ -52,13 +52,6 @@ define(['underscore-contrib', 'jquery'], function(_, $){
     return deferred.promise();
   };
 
-  // //test
-  // var sample = ['My name is Davis King and I work for MIT.',
-  //               'I met with John Becker at HBU',
-  //               'I met with Jim at Harvard' ];
-  // _.each(sample, addSample);
-  // addTag(0, 3, 5, "person");  
-  // addTag(1, 3, 5, "person");    
 
   return {
     addSample : addSample,
