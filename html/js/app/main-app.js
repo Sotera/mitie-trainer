@@ -113,15 +113,14 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
     alert('Error: route not found, go back');
   });
 
-  //setup hasher
-  //only required if you want to set a default value
-  if(hasher.getHash().length < 1) {
-    hasher.setHash(DEFAULT_HASH);
-  }
-  
   hasher.initialized.add(parseHash); //parse initial hash
   hasher.changed.add(parseHash); //parse hash changes
 
   hasher.init(); //start listening for hash changes
+
+  if (hasher.getHash().length < 1){
+    hasher.setHash(DEFAULT_HASH);
+  }
+  
 
 });
