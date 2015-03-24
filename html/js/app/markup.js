@@ -13,10 +13,12 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
                              current: entityType,
                              remove: function(){
                                $(scopeEl).children().first().unwrap();
+                               save();
                              },
                              onSave: function(entityType){
                                $(scopeEl).removeClass();
                                tagBuilder(scopeEl, entityType);
+                               save();
                              }
                            });
 
@@ -37,6 +39,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
                            onSave: function(entityType){
                              $(scopeEl).removeClass("highlight");
                              tagBuilder(scopeEl, entityType);
+                             save();
                            }
                          });
       //containerViewModel.panelToggle();
@@ -128,7 +131,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       addTag(t[0], t[1], t[2]);
     });
 
-    utils.navigate(routes.HOME());
+
   };
 
   var render = function(el, i){
@@ -186,8 +189,13 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       });
 
       var cancel = _.partial(utils.navigate, routes.HOME())
+
+      var saveAndClose = function(){
+        save();
+        utils.navigate(routes.HOME());
+      };
       
-      ko.applyBindings({ 'save': save, 'cancel' : cancel }, el[0]);
+      ko.applyBindings({ 'save': saveAndClose, 'cancel' : cancel }, el[0]);
     });
 
 
