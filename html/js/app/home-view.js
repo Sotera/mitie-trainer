@@ -139,7 +139,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         var evt = document.createEvent("HTMLEvents");
         evt.initEvent("click");
         var el = document.createElement('a');
-        el.download = "test.json";
+        el.download = "training_export_" +(+new Date) + ".json" ;
         var f = new Blob([JSON.stringify(data.trainings())], {'type': 'application/json'});
         el.href = URL.createObjectURL(f);
         el.dispatchEvent(evt);
