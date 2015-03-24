@@ -121,6 +121,16 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
   if (hasher.getHash().length < 1){
     hasher.setHash(DEFAULT_HASH);
   }
-  
+ 
+  var autosave_interval = function(){
+    var autosaves = function(){
+      utils.autosave(data.trainings()).done(function(resp){
+        console.log('auto saved ' + resp.saved);
+      });
+    };
+    setInterval(autosaves, 30000);
+  };
 
+  var init_interval =_.once(autosave_interval);
+  init_interval();
 });

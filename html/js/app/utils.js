@@ -6,6 +6,16 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
     hasher.setHash(url);
   };
 
+  var autosave = function(trainings){
+    return $.ajax({
+      url:'data/auto_save',
+      type:"POST",
+      data:JSON.stringify({ 'trainings' : trainings }),
+      contentType:"application/json; charset=utf-8",
+      dataType:"json"
+    });
+  };
+
   var isElementInViewport = function(el, container) {
     if (typeof jQuery === "function" && el instanceof jQuery) {
       el = el[0];
@@ -22,6 +32,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
 
   return {
     navigate : navigate,
+    autosave : autosave,
     isElementInViewport: isElementInViewport, 
   };
 });
