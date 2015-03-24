@@ -115,7 +115,7 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
 
   //setup hasher
   //only required if you want to set a default value
-  if(! hasher.getHash()) {
+  if(hasher.getHash().length < 1) {
     hasher.setHash(DEFAULT_HASH);
   }
   
