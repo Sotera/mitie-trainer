@@ -188,14 +188,8 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
         });
       });
 
-      var cancel = _.partial(utils.navigate, routes.HOME())
-
-      var saveAndClose = function(){
-        save();
-        utils.navigate(routes.HOME());
-      };
-      
-      ko.applyBindings({ 'save': saveAndClose, 'cancel' : cancel }, el[0]);
+      var navigate_home = _.partial(utils.navigate, routes.HOME())
+      ko.applyBindings({ 'navigate_home': navigate_home }, el[0]);
     });
 
 
