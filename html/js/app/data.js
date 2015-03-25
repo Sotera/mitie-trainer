@@ -43,23 +43,12 @@ define(['underscore-contrib', 'jquery'], function(_, $){
     data = j.slice(0);
   };
 
-  var load = function(){
-    var deferred = new $.Deferred();
-    $.get('data/all', function(resp){
-      data = resp.data;
-      deferred.resolve(data);
-    });
-    return deferred.promise();
-  };
-
-
   return {
     addSample : addSample,
     addTag : addTag,
     clearTags : clearTags,
     removeTag : removeTag,
     trainings : trainings,
-    init : load,
     bulkload : bulkload
   }
 });

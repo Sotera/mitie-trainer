@@ -54,7 +54,6 @@ document.oncontextmenu = function(){ return false; };
 requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/utils','app/routes', 'app/data', 'jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, utils, routes, data, $){
 
   ko.applyBindings(main_window, $('body')[0]);
-  data.init();
 
   var DEFAULT_HASH = routes.HOME();
 
@@ -121,16 +120,6 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
   if (hasher.getHash().length < 1){
     hasher.setHash(DEFAULT_HASH);
   }
- 
-  var autosave_interval = function(){
-    var autosaves = function(){
-      utils.autosave(data.trainings()).done(function(resp){
-        console.log('auto saved ' + resp.saved);
-      });
-    };
-    setInterval(autosaves, 30000);
-  };
 
-  var init_interval =_.once(autosave_interval);
-  init_interval();
+  utils.autosave_interval(data);
 });
