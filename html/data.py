@@ -29,7 +29,7 @@ def all(*args):
 #POST /data/auto_save {  } 
 def auto_save(*args, **kwargs):
     cherrypy.log("saved")
-    f= "{}.json".format(datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    f= "session_{}.json".format(datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     spit("{}/{}".format(auto_save_dir, f), json.dumps(kwargs))
     tangelo.content_type("application/json")
     return { 'saved': f }

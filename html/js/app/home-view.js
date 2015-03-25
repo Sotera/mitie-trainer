@@ -140,7 +140,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         evt.initEvent("click");
         var el = document.createElement('a');
         el.download = "training_export_" +(+new Date) + ".json" ;
-        var f = new Blob([JSON.stringify(data.trainings())], {'type': 'application/json'});
+        var f = new Blob([JSON.stringify( {'trainings' : data.trainings()})], {'type': 'application/json'});
         el.href = URL.createObjectURL(f);
         el.dispatchEvent(evt);
       };
@@ -158,7 +158,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
               var JsonObj = e.target.result
               console.log(JsonObj);
               var parsedJSON = JSON.parse(JsonObj);
-              data.bulkload(parsedJSON);
+              data.bulkload(parsedJSON.trainings);
               utils.navigate(routes.HOME("reload"));
             };
           })(f);
