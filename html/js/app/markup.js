@@ -189,7 +189,21 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       });
 
       var navigate_home = _.partial(utils.navigate, routes.HOME())
-      ko.applyBindings({ 'navigate_home': navigate_home }, el[0]);
+      var navigate_next = function (){
+        var i = _.last(utils.current_route_array());
+        if (_.isNumeric(i) && 
+            (+i < data.trainings().length - 1)){
+          utils.navigate(routes.TRAIN(+i + 1));
+        };
+      };
+      var navigate_prev = function (){
+        var i = _.last(utils.current_route_array());
+        if (_.isNumeric(i) && 
+            (+i > 0)){
+          utils.navigate(routes.TRAIN(+i - 1));
+        };
+      };
+      ko.applyBindings({ 'navigate_prev' : navigate_prev, 'navigate_home': navigate_home, 'navigate_next' : navigate_next }, el[0]);
     });
 
 

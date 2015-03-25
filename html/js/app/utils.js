@@ -22,6 +22,10 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
     setInterval(autosaves, (3 * 60 * 1000));
   });
 
+  var current_route_array = function(){
+    return hasher.getHashAsArray();
+  };
+  
   var isElementInViewport = function(el, container) {
     if (typeof jQuery === "function" && el instanceof jQuery) {
       el = el[0];
@@ -38,6 +42,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
 
   return {
     navigate : navigate,
+    current_route_array : current_route_array,
     autosave_interval : autosave_interval,
     isElementInViewport: isElementInViewport, 
   };
