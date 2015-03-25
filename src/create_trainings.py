@@ -9,8 +9,10 @@ import argparse
 import shutil
 import json
 
+from config import Config
+cfg = Config(file('conf/app.cfg'))
 
-sys.path.append('/srv/software/MITIE/mitielib')
+sys.path.append('{}/mitielib'.format(cfg.MITIE_PATH))
 
 from mitie import *
 
@@ -68,4 +70,4 @@ if __name__ == "__main__":
 
         results.append(sample)
 
-    print json.dumps(results)
+    print json.dumps({ 'trainings' : results })
