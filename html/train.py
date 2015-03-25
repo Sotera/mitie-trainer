@@ -9,7 +9,11 @@ import json
 WEB_ROOT = cherrypy.config.get("webroot")
 trained_dir = "{}/data/trained".format(WEB_ROOT)
 
-sys.path.append('/srv/software/MITIE/mitielib')
+from config import Config
+
+cfg = Config(file("{}/../conf/app.cfg".format(WEB_ROOT)))
+
+sys.path.append('{}/mitielib'.format(cfg.MITIE_PATH))
 
 from mitie import *
 
@@ -21,7 +25,7 @@ def fmtNow():
 
 def new(*args):
     global trainer 
-    trainer = ner_trainer('/srv/software/MITIE/MITIE-models/english/total_word_feature_extractor.dat')
+    trainer = ner_trainer('{}/MITIE-models/english/total_word_feature_extractor.dat'.format(WEB_ROOT))
 
 
 ## tags array triples [ (start, end, tag) ]
