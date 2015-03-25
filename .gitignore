@@ -5,3 +5,5 @@ html/data/trained/
 !html/data/trained/.keep
 html/data/trainings/
 !html/data/trainings/.keep
+html/data/auto_saves/*
+!html/data/auto_saves/.keep
