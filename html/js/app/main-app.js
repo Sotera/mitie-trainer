@@ -55,6 +55,18 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
 
   ko.applyBindings(main_window, $('body')[0]);
 
+  if (data.trainings().length < 1){
+    $.ajax({
+          url:'data/last_save',
+          type:"GET",
+          contentType:"application/json; charset=utf-8",
+          dataType:"json"
+    }).done(function(resp){
+      console.log('data loaded from prev session');
+      data.bulkload(resp.trainings);
+    });
+  };
+
   var DEFAULT_HASH = routes.HOME();
 
   function setHashSilently(hash){

@@ -8,18 +8,20 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
 
   var autosave_interval = _.once(function(data){
     var autosaves = function(){
-      $.ajax({
-        url:'data/auto_save',
-        type:"POST",
-        data:JSON.stringify({ 'trainings' : data.trainings() }),
-        contentType:"application/json; charset=utf-8",
-        dataType:"json"
-      }).done(function(resp){
-        console.log('auto saved ' + resp.saved);
-      });
+      if (data.trainings().length > 0){
+        $.ajax({
+          url:'data/auto_save',
+          type:"POST",
+          data:JSON.stringify({ 'trainings' : data.trainings() }),
+          contentType:"application/json; charset=utf-8",
+          dataType:"json"
+        }).done(function(resp){
+          console.log('auto saved ' + resp.saved);
+        });
+      }
     };
     //3 min
-    setInterval(autosaves, (3 * 60 * 1000));
+    setInterval(autosaves, 60 * 1000);
   });
 
   var current_route_array = function(){

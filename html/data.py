@@ -1,6 +1,4 @@
-
-
-import sys, os
+import sys, os, glob
 import tangelo
 import cherrypy
 import json
@@ -8,23 +6,17 @@ import datetime
 
 from trainer.utils.file import slurp, spit
 
-sys.path.append('/srv/software/MITIE/mitielib')
-
-from mitie import *
-
 WEB_ROOT = cherrypy.config.get("webroot")
-sample_dir = "{}/data/trainings/sample".format(WEB_ROOT)
 auto_save_dir = "{}/data/auto_saves".format(WEB_ROOT)
 
-## load data
-files = filter(lambda x: x.endswith(".txt"), os.listdir(sample_dir))
-data = json.loads(slurp("{}/sample.json".format(sample_dir)))
-
-#GET /data/all
-def all(*args):
-    global data
+#GET /data/last_save
+def last_save(*args):
     tangelo.content_type("application/json")    
-    return { 'data': data }
+    saves=list(glob.iglob('{}/*.json'.format(auto_save_dir)))
+    if len(saves) > 0:
+        f= max(saves, key=os.path.getctime)
+        return slurp(f)
+    return { 'trainings' : [] }
 
 #POST /data/auto_save {  } 
 def auto_save(*args, **kwargs):
@@ -35,7 +27,7 @@ def auto_save(*args, **kwargs):
     return { 'saved': f }
 
 actions = {
-    "all":  all
+    "last_save":  last_save
 }
 
 post_actions = {
