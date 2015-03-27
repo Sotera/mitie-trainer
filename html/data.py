@@ -18,11 +18,22 @@ def last_save(*args):
         return slurp(f)
     return { 'trainings' : [] }
 
+def rm(filePath):
+    if os.path.isfile(filePath):
+        os.remove(filePath)
+
+def remove_old_files():
+    saves=list(glob.iglob('{}/*.json'.format(auto_save_dir)))
+    if len(saves) > 0:
+        for f in sorted(saves, key=os.path.getctime)[:-100]:
+            rm(f)
+
 #POST /data/auto_save {  } 
 def auto_save(*args, **kwargs):
     cherrypy.log("saved")
     f= "session_{}.json".format(datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     spit("{}/{}".format(auto_save_dir, f), json.dumps(kwargs))
+    remove_old_files()    
     tangelo.content_type("application/json")
     return { 'saved': f }
 
