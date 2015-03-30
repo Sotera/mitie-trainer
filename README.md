@@ -31,4 +31,51 @@ Navigate to where Tangelo is running in your browser (the default is 0.0.0.0:808
 
 
 
+### Tools
+
+**Model Training**
+
+From an export of the tagger tool you can create a new model by running the **train_model.py** tool.
+
+```
+cat training_export_*.json | ./tools/train_model.py /srv/software/MITIE/MITIE-models/english/total_word_feature_extractor.dat new_ner_model.dat
+```
+
+**Tagging**
+
+You can use the trained model to tag a training set.  This will replace all tags with tags from MITIE.  
+
+```
+cat training_export_*.json | ./tools/tag_trainings.py new_ner_model.dat > tmp/tagged_sample.json
+```
+
+**Diff Taggings**
+
+To get a summarized report of what was changed between too trainings files you can use the **diff_training.py** tool. This will give the report of what was added removed modified by each ID 
+
+```
+./tools/diff_trainings.py training_export_*.json tmp/tagged_sample.json
+```
+
+
+Sample Diff Report
+
+
+--- Summary ---
+trainings in common 20
+trainings modified 4
+total modifications 6
+total modified 0, added 3, removed 3
+--- modifications by type ---
+PERSON modified 0, added 3, removed 3
+--- modifications ---
+scottwalker1/00224_00225   -   {"start": 200, "tag": "person", "end": 202, "input_file": "A"}
+scottwalker1/00224_00225   -   {"start": 346, "tag": "person", "end": 350, "input_file": "A"}
+scottwalker1/00226_00228   -   {"start": 106, "tag": "person", "end": 108, "input_file": "A"}
+scottwalker1/00229_00239   +   {"start": 2903, "tag": "person", "end": 2904, "score": 0.0, "input_file": "B"}
+scottwalker1/00256_00257   +   {"start": 442, "tag": "person", "end": 443, "score": 0.0, "input_file": "B"}
+scottwalker1/00256_00257   +   {"start": 443, "tag": "person", "end": 444, "score": 0.0, "input_file": "B"}
+
+
+
 
