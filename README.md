@@ -49,6 +49,8 @@ You can use the trained model to tag a training set.  This will replace all tags
 cat training_export_*.json | ./tools/tag_trainings.py new_ner_model.dat > tmp/tagged_sample.json
 ```
 
+The newly tagged file **tagged_sample.json** can now be imported back in to the tagging tool to be evaluated
+
 **Diff Taggings**
 
 To get a summarized report of what was changed between too trainings files you can use the **diff_training.py** tool. This will give the report of what was added removed modified by each ID 
