@@ -60,7 +60,7 @@ To get a summarized report of what was changed between too trainings files you c
 
 Sample Diff Report
 
-
+```
 --- Summary ---
 trainings in common 20
 trainings modified 4
@@ -75,7 +75,7 @@ scottwalker1/00226_00228   -   {"start": 106, "tag": "person", "end": 108, "inpu
 scottwalker1/00229_00239   +   {"start": 2903, "tag": "person", "end": 2904, "score": 0.0, "input_file": "B"}
 scottwalker1/00256_00257   +   {"start": 442, "tag": "person", "end": 443, "score": 0.0, "input_file": "B"}
 scottwalker1/00256_00257   +   {"start": 443, "tag": "person", "end": 444, "score": 0.0, "input_file": "B"}
-
+```
 
 
 
