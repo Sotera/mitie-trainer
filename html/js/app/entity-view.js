@@ -1,11 +1,6 @@
-define(['underscore-contrib', 'jquery', 'windows', 'ko', 'app/main-window'], function(_, $, windows, ko, main_window){
+define(['underscore-contrib', 'jquery', 'windows', 'ko', 'app/main-window', 'app/tag-types'], function(_, $, windows, ko, main_window, tag_types){
 
-  var entityTypes = ko.observableArray(
-    [ {'text': 'person', 'color': '#ff7f0e'},
-      {'text': 'location', 'color': '#98DF8A'},
-      {'text': 'organization', 'color' : '#AEC7E8'}, 
-      {'text': 'misc', 'color': '#c7c7c7'} 
-    ]);
+  var entityTypes = ko.observableArray(tag_types);
   
   //inject colors
   $("head").append($('<style>')
