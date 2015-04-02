@@ -6,6 +6,10 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
     hasher.setHash(url);
   };
 
+  var strEndsWith = function(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+  };
+
   var autosave_interval = _.once(function(data){
     var autosaves = function(){
       if (data.trainings().length > 0){
@@ -43,6 +47,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
   };
 
   return {
+    strEndsWith : strEndsWith,
     navigate : navigate,
     current_route_array : current_route_array,
     autosave_interval : autosave_interval,

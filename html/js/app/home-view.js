@@ -145,6 +145,28 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         el.dispatchEvent(evt);
       };
 
+      var training_save_server_handler = function(){
+        var filename = prompt("Please enter a file name.", "training_" +(+new Date) + ".json");
+        if (filename != null) {
+          if (!utils.strEndsWith(filename, ".json")){
+            filename = filename + ".json";
+          }
+          $.ajax({
+            url:'data/server_save',
+            type:"POST",
+            data:JSON.stringify({ 'name' : filename, 
+                                  'data' : {'trainings' : data.trainings() }}),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json"
+          }).done(function(resp){
+            console.log(resp);
+            alert("saved " + resp.saved);
+          }).fail(function(){
+            console.log("save failed");
+          });
+
+        }};
+
       var training_upload = function(){
 
         var fileSelected = function(evt) {
@@ -174,6 +196,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
 
       ko.applyBindings({ training_upload: training_upload, 
                          training_save: training_save_handler, 
+                         training_save_server: training_save_server_handler,
                          test_handler: navigate_test, 
                          save: save, 
                          train: train, 
