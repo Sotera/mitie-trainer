@@ -22,14 +22,14 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       .select("thead")
       .append("tr")
       .selectAll("tr")
-      .data(['ID', 'Snippet', 'Trained'])
+      .data(['Index', 'ID', 'Snippet', 'Trained'])
       .enter().append("th").text(_.identity);
 
     var tr = d3.select(el[0]).select("tbody").selectAll("tr")
       .data(rows)
       .enter().append("tr")
       .attr("class", function(d){
-        if (d[2]) return "success";
+        if (d[3]) return "success";
       })
       .on("click", function(d){
         utils.navigate(routes.TRAIN(d[0]))
@@ -48,7 +48,14 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       .data(_.identity)
       .enter().append("td")
       .html(function(d, i){
-        if (i == 2){        
+
+        if (i == 1){
+            return $('<_>').append(
+              $('<span>').html(d.length > 50 ? d.substr(0, 47) + "..." : d).attr('title', d)
+            ).html();          
+        } 
+
+        if (i == 3){        
           if (d) {
             return $('<_>').append(
               $('<span>').addClass('glyphicon').addClass('glyphicon-ok')
@@ -121,7 +128,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       table = ref.find('.table-container');
       table_container(table);
       render_table(table, _.map(data.trainings(), function(d, i){ 
-        return [i, d.text.substr(0, 150), d.tags.length > 0 ];
+        return [i, d.id, d.text.substr(0, 150), d.tags.length > 0 ];
       }));
       var trainingCount = ko.observable(data.trainings().length);
       var trained = ko.observable(_.filter(data.trainings(), function(o){

@@ -87,6 +87,10 @@ html, body {
 }
 
 .table-container > table tbody tr td:nth-child(2) {
+    text-align: left;
+}
+
+.table-container > table tbody tr td:nth-child(3) {
     min-width: 500px;
     text-align: left;
 }
