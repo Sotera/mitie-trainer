@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys
 import os
 import argparse
@@ -84,34 +87,37 @@ def analyze(modifications):
     return (num_of_train_edits, total_mod_counts, grouped_mitie_type.items())
 
 
-trainings = sorted(
+
+if __name__ == "__main__":
+
+    desc='Diff trainings between 2 files A B '
+
+    parser = argparse.ArgumentParser(
+        description="MITIE diff trainings", 
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=desc)
+    parser.add_argument("input_A", help="input training file A")
+    parser.add_argument("input_B", help="input training file B")
+
+    args= parser.parse_args()
+    
+    fileA = json.loads(slurp(args.input_A))
+    fileB = json.loads(slurp(args.input_B))
+
+    trainings = sorted(
         map(lambda o : addFileTag(o, 'A'), fileA['trainings'])
         +map(lambda o : addFileTag(o, 'B'), fileB['trainings']), key= lambda o : o['id'])
 
 
-pairs= [list(g) for k, g in itertools.groupby(trainings, key=lambda o: o['id'])]
-train=pairs[0][0]['tags']
-model=pairs[0][1]['tags']
+    pairs= [list(g) for k, g in itertools.groupby(trainings, key=lambda o: o['id'])]
+    train=pairs[0][0]['tags']
+    model=pairs[0][1]['tags']
 
 
-filtered_pairs = filter(lambda x : len(x[0]['tags']) >0 and len(x[1]['tags']), pairs)
-r = filter(lambda x : x, map(lambda p: diffs(p[0], p[1]),  filtered_pairs))
-mean_precision = np.mean(map(lambda x: x[0],r))
-mean_recall = np.mean(map(lambda x:x[1],r))
-f = 2.0* (mean_precision*mean_recall)/(mean_precision+mean_recall)
-print f
-edits =  [ item for l in r for item in l ]
-
-#analysis = analyze(edits)
-print "--- Summary ---"
-print "trainings in common {}".format(len(filtered_pairs))
-print "trainings modified {}".format(analysis[0])
-print "total modifications {}".format(len(edits))
-print "total modified {}, added {}, removed {}".format(*analysis[1])
-print "--- modifications by type ---"
-#for t in analysis[2]:
-#        print "{} modified {}, added {}, removed {}".format(t[0].upper(), *t[1])
-
-print "--- modifications ---"
-#for edit in edits:
-        #print "{}\t{}\t{}".format(edit[0], edit[1], edit[2])
+    filtered_pairs = filter(lambda x : len(x[0]['tags']) >0 and len(x[1]['tags']), pairs)
+    r = filter(lambda x : x, map(lambda p: diffs(p[0], p[1]),  filtered_pairs))
+    mean_precision = np.mean(map(lambda x: x[0],r))
+    mean_recall = np.mean(map(lambda x:x[1],r))
+    f = 2.0* (mean_precision*mean_recall)/(mean_precision+mean_recall)
+    print "----Summary----"
+    print "f1 score: " + str(f)
