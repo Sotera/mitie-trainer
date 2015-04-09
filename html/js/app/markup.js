@@ -227,12 +227,12 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
 
         //highlight is somewhere else remove it and move the highlight
         //to the current location
-        if (currentHighlight.hasClass("tag")){
-          currentHighlight.removeClass("highlight");
-        } else {
-          currentHighlight.find('span').first().unwrap();
-        }
-        highlightBuilder(span);        
+        // if (currentHighlight.hasClass("tag")){
+        //   currentHighlight.removeClass("highlight");
+        // } else {
+        //   currentHighlight.find('span').first().unwrap();
+        // }
+        // highlightBuilder(span);        
 
       };
 
