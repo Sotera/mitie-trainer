@@ -79,6 +79,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
               return type.color;
             }
           }
+          $(".markup-container").focus();
           return "";          
         });
       };
