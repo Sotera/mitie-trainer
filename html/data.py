@@ -45,12 +45,17 @@ def server_save(*args, **kwargs):
     tangelo.content_type("application/json")
     return { 'saved': f }
 
+def save_tags(*args, **kwargs):
+    data = kwargs.get('types')
+    spit("{}/js/types.json".format(WEB_ROOT), json.dumps({ 'types' : data }), True)
+    return { 'saved': 'SUCCESS' }
 
 actions = {
     "last_save":  last_save
 }
 
 post_actions = {
+    "save_tags" : save_tags,
     "auto_save" : auto_save,
     "server_save" : server_save
 }

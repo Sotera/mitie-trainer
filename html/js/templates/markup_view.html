@@ -1,23 +1,34 @@
- <div class="markup-container unselectable">
+<div style="padding: 5px; position: absolute;">
+  <div class="btn-group" role="group" data-bind="foreach: entity_types">
+    <button type="button" class="btn btn-default"
+            data-bind="click : $parent.selectedType($data), attr: { 'data-type' : $data.text }, style : { 
+                       'background-color' : $parent.selectedFn($data)
+                       }">
+      <div style="border-bottom-width: 10px; border-bottom-style: solid; text-transform: capitalize;" 
+           data-bind="style : { 'border-bottom-color' : $data.color }, text: $data.text"></div>
+    </button>
+  </div>
+</div>
 
+
+<div tabindex="0" class="markup-container unselectable" style="margin-top: 75px;margin-bottom: 75px;"
+     data-bind="event: { 'keydown': checkKey }">
 </div>
 
 <hr />
 
-
-<div style="margin: 10px;">
+<div style="margin: 10px; position: absolute;bottom: 10px;">
   <div style="margin: 10px;display: inline-block">
-    <button class="btn btn-default" data-bind="click: navigate_prev">
+    <button class="btn btn-primary" data-bind="click: navigate_prev">
       <span class="glyphicon glyphicon-arrow-left"></span> 
     </button>
   </div>
   <div style="margin: 10px;display: inline-block">
-    <button class="btn btn-default" data-bind="click: navigate_home">Home</button>
+    <button class="btn btn-primary" data-bind="click: navigate_home">Home</button>
   </div>
   <div style="margin: 10px;display: inline-block">
-    <button class="btn btn-default" data-bind="click: navigate_next">
+    <button class="btn btn-primary" data-bind="click: navigate_next">
       <span class="glyphicon glyphicon-arrow-right"></span> 
     </button>
   </div>
 </div>
-

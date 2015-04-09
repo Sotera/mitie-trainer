@@ -6,6 +6,17 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
     hasher.setHash(url);
   };
 
+  var findIndex = function(list, pred){
+    var l = list.length;
+    var i = 0;
+    for (;i<l;i++){
+      if (pred(list[i])){
+        return i;
+      }
+    }
+    return -1;
+  };
+
   var strEndsWith = function(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
   };
@@ -47,6 +58,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
   };
 
   return {
+    findIndex : findIndex,
     strEndsWith : strEndsWith,
     navigate : navigate,
     current_route_array : current_route_array,

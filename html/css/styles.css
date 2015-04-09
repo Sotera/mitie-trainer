@@ -8,6 +8,8 @@ html, body {
     padding: 0;
 }
 
+ul.none { list-style-type: none; margin: 0; padding: 0; }
+
 .window-container {
     height: calc(100% - 50px);
     width: 100%;
@@ -129,6 +131,11 @@ html, body {
     display: inline;
     vertical-align: bottom;
 }
+
+div.tag.highlight {
+    border: 1px solid yellow;
+}
+
 
 .highlight>span {
     padding-right: 5px;
