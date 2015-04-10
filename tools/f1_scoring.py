@@ -7,8 +7,11 @@ import argparse
 import itertools
 import json
 import numpy as np
+from itertools import chain, imap
 
-
+def flatmap(f, items):
+    return chain.from_iterable(imap(f, items))
+    
 def slurp(filePath):
     with open(filePath) as x: data = x.read()
     return data
@@ -17,7 +20,12 @@ def addFileTag(o, tag):
     o['input_file'] = tag
     return o
 
-def diffs(a,b):
+def diffs(items,all_tags):
+    a=items[0]
+    try:
+        b=items[1]
+    except:
+        b=items[0]
     _id = a['id']
     keyfn=lambda o: '{}_{}'.format(o['start'], o['end'])
     
@@ -28,32 +36,43 @@ def diffs(a,b):
     
     
     results = []
-    fp=0
-    tp=0
-    fn=0
-    tn=0
+    score = dict.fromkeys(all_tags)
+    for tag in all_tags:
+        score[str(tag)]={}
+        score[str(tag)]['fp']=0
+        score[str(tag)]['tp']=0
+        score[str(tag)]['fn']=0
+        score[str(tag)]['tn']=0
     for k, g in grouped_tags:
+        
         items= list(g)
         if len(items) == 1:
             if items[0]['input_file']=='A':
-                fn+=1
+                score[str(items[0]['tag'])]['fn']+=1
             else:
-                tn+=1
+                score[str(items[0]['tag'])]['tn']+=1
             results.append((_id, '-' if items[0]['input_file'] == 'A' else '+', json.dumps(items[0])))
         else:
             if items[0]['tag'] != items[1]['tag']:
-                if items[0]['input_file'] == 'A':
-                    fp+=1
-                    results.append((_id, 'M', "{} | {}".format(json.dumps(items[0]), json.dumps(items[1]))))
-                else:
-                    results.append((_id, 'M', "{} | {}".format(json.dumps(items[1]), json.dumps(items[0]))))
+                score[str(items[0]['tag'])]['fp']+=1
             if items[0]['tag'] == items[1]['tag']:
-                tp+=1
-    #print fp,tp,fn,tn
-    precision=float(tp/(tp+fp))
-    recall=float(tp/(tp+fn))
-    #print precision, recall
-    return precision,recall
+                score[str(items[0]['tag'])]['tp']+=1
+        
+    def scoring(x):
+        try:
+           precision=float(x['tp'])/(x['fp']+x['tp'])
+
+        except ZeroDivisionError:
+            precision=0
+        try:
+            recall=float((x['tp'])/(x['tp']+x['fn']))
+        except ZeroDivisionError:
+            recall=0
+        return (precision,recall)
+        
+    return  {k:scoring(v) for k, v in score.items()}    
+    #return precision,recall
+
 
 def analyze(modifications):
     grouped_trainings = itertools.groupby(modifications, key= lambda o: o[0])
@@ -105,19 +124,37 @@ if __name__ == "__main__":
     fileB = json.loads(slurp(args.input_B))
 
     trainings = sorted(
-        map(lambda o : addFileTag(o, 'A'), fileA['trainings'])
-        +map(lambda o : addFileTag(o, 'B'), fileB['trainings']), key= lambda o : o['id'])
+            map(lambda o : addFileTag(o, 'A'), fileA['trainings'])
+            +map(lambda o : addFileTag(o, 'B'), fileB['trainings']), key= lambda o : o['id'])
 
 
     pairs= [list(g) for k, g in itertools.groupby(trainings, key=lambda o: o['id'])]
-    train=pairs[0][0]['tags']
-    model=pairs[0][1]['tags']
 
 
-    filtered_pairs = filter(lambda x : len(x[0]['tags']) >0 and len(x[1]['tags']), pairs)
-    r = filter(lambda x : x, map(lambda p: diffs(p[0], p[1]),  filtered_pairs))
-    mean_precision = np.mean(map(lambda x: x[0],r))
-    mean_recall = np.mean(map(lambda x:x[1],r))
+    filtered_pairs = filter(lambda x : x[0]['tags']!=[] and x[0]['input_file']=='A' , pairs)
+
+    all_tags=list(set([tag['tag'] for t in fileA['trainings'] for tag in t['tags']]))
+    r=map(lambda p: diffs(p,all_tags), filtered_pairs)
+
+
+
+    table=[]
+    for tag in all_tags:
+          mean_precision=np.mean([i for i,j in  map(lambda x: x[tag],r)])
+          mean_recall=np.mean([j for i,j in  map(lambda x: x[tag],r)])
+          f = 2.0* (mean_precision*mean_recall)/(mean_precision+mean_recall)
+          if np.isnan(f):
+            f=0
+          table.append([tag, "%.3f"%f, "%.3f"%mean_precision, "%.3f"%mean_recall])
+
+    mean_precision=np.mean([i for i,j in flatmap(lambda x: list(x.values()),r)])
+    mean_recall=np.mean([j for i,j in  flatmap(lambda x: list(x.values()),r)])
     f = 2.0* (mean_precision*mean_recall)/(mean_precision+mean_recall)
-    print "----Summary----"
-    print "f1 score: " + str(f)
+    table.append(['total',"%.3f"%f, "%.3f"%mean_precision, "%.3f"%mean_recall])
+
+    print table
+    header=['tag','f1','precision','recall']
+    print("{0:<10} {1:<10} {2:<10} {3:<10}".format(*header))
+    print("---------------------------------------")
+    for row in table:
+        print("{0:<10} {1:<10} {2:<10} {3:<10}".format(row[0], row[1], row[2],row[3]))
