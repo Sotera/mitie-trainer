@@ -8,10 +8,37 @@
            data-bind="style : { 'border-bottom-color' : $data.color }, text: $data.text"></div>
     </button>
   </div>
+  <div style="padding-top: 10px;">
+    <span> id: </span>
+    <span class="id_field" style="padding-right: 10px;font-weight: bold;"
+    data-bind="text: id"></span>
+
+    <span style="padding: 3px 7px;">- Keyboard Shortcuts: </span>
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> t </span>
+    <span style="padding: 3px 5px;"> tag </span>
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> u </span>
+    <span style="padding: 3px 5px;"> untag </span>
+
+    <span style="padding: 3px 7px;">Switch Type: </span>    
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> ← </span>
+    <span style="padding: 3px 5px;"> Left </span>
+
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> → </span>
+    <span style="padding: 3px 5px;"> Right </span>
+  </div>
+
 </div>
 
 
-<div tabindex="0" class="markup-container unselectable" style="margin-top: 75px;margin-bottom: 75px;"
+<div tabindex="0" class="markup-container unselectable" style="margin-top: 100px;margin-bottom: 75px;"
      data-bind="event: { 'keydown': checkKey }">
 </div>
 

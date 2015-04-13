@@ -37,7 +37,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
     view().then(function(tmpl){
       el.html(tmpl);
       var container = el.find(".markup-container").first();
-
+      var id = ko.observable(data.trainings()[i].id);
       container.append(
         _.map(data.trainings()[i].tokens,
               function(part, i){ 
@@ -237,6 +237,7 @@ define(['underscore-contrib', 'ko', 'windows', 'app/main-window', 'app/routes', 
       };
 
       ko.applyBindings({ 
+        'id' : id,
         'entity_types' : entity_types,
         'selectedType' : setSelectedType,
         'checkKey' : checkKey,
