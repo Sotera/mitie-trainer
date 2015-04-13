@@ -1,45 +1,51 @@
 
 <div style="margin-top: 75px;margin-bottom: 75px;margin-left: 20px;">
 
-  <ul data-bind= "foreach: tags" class="none">
-    <li>
-      
-      <div style="display: inline-block;"
-           data-bind="click: $parent.remove($data)">
+  <div style="width: 30%;display: inline-block;">
+    <ul data-bind= "foreach: tags" class="none">
+      <li>
+        
+        <div style="display: inline-block;"
+             data-bind="click: $parent.remove($data)">
           <span class="glyphicon glyphicon-remove"></span>
-      </div>
-      <div style="display: inline-block; width: 150px;font-size: 20px;text-transform: capitalize;" 
-           data-bind="text : $data.text">
-      </div>
-      
-      <div style="display: inline-block;vertical-align: bottom;" 
-           data-color="#ffffff" 
-           data-color-format="hex" class="cp">
-        <div style="display: inline-block;height: 20px;width: 20px;border: 1px solid #000;" 
-             data-bind="style: {'background-color': $data.color }" />
-      </div>
-    </li>
-  </ul>
-
-</div>
-
-
-<div style="padding-bottom: 15px;padding-left: 20px;"> 
-  <label style="font-weight: bold;width: 50px;">Name:</label> 
-  <div style="display: inline-block;vertical-align: bottom;">
-    <input type="text" data-bind="value: newName" ></input>
+        </div>
+        <div style="display: inline-block; width: 150px;font-size: 20px;text-transform: capitalize;" 
+             data-bind="text : $data.text">
+        </div>
+        
+        <div style="display: inline-block;vertical-align: bottom;" 
+             data-color="#ffffff" 
+             data-color-format="hex" class="cp">
+          
+          <div style="display: inline-block;height: 20px;width: 20px;border: 1px solid #000;" 
+               data-bind="style: {'background-color': $data.color }"
+               /> 
+        </div>
+        
+      </li>
+    </ul>
   </div>
-</div>
 
-<div style="padding-bottom: 15px;padding-left: 20px;"> 
-  <label style="font-weight: bold;width: 50px;">Color:</label> 
-  <div style="display: inline-block;vertical-align: bottom;" data-color="#ffffff" data-color-format="hex" id="cp-edit">
-    <div style="display: inline-block;height: 20px;width: 20px;border: 1px solid #000;" data-bind="style: {'background-color': newColor }" />
+  <div style="display:inline-block;vertical-align: top;">
+    <div style="padding-bottom: 15px;padding-left: 20px;"> 
+      <label style="font-weight: bold;width: 50px;">Name:</label> 
+      <div style="display: inline-block;vertical-align: bottom;">
+        <input type="text" data-bind="value: newName" ></input>
+      </div>
+    </div>
+
+    <div style="padding-bottom: 15px;padding-left: 20px;"> 
+      <label style="font-weight: bold;width: 50px;">Color:</label> 
+      <div style="display: inline-block;vertical-align: bottom;" data-color="#ffffff" data-color-format="hex" id="cp-edit">
+        <div style="display: inline-block;height: 20px;width: 20px;border: 1px solid #000;" data-bind="style: {'background-color': newColor }" />
+      </div>
+    </div>
+
+    <div style="padding-bottom: 15px;padding-left: 20px;"> 
+      <button type="submit" class="btn btn-primary" data-bind= "click: addEntityType">Add</button>
+    </div>
   </div>
-</div>
 
-<div style="padding-bottom: 15px;padding-left: 20px;"> 
-  <button type="submit" class="btn btn-primary" data-bind= "click: addEntityType">Add</button>
 </div>
 
 
