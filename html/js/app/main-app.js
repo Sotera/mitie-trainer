@@ -51,10 +51,12 @@ requirejs.config({
 //prevent context menu
 document.oncontextmenu = function(){ return false; };
 
-requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/utils','app/routes', 'app/data', 'jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, utils, routes, data, $){
+requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window','app/utils','app/routes', 'app/data', 'app/tag-types', 'app/css','jquery', 'bootstrap'], function(_, crossroads, hasher, ko, main_window, utils, routes, data, tag_types, css, $){
 
   ko.applyBindings(main_window, $('body')[0]);
-  data.init();
+  tag_types.init().done(function(){
+    css.refreshRules();
+  });
 
   var DEFAULT_HASH = routes.HOME();
 
@@ -72,6 +74,8 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
     crossroads.parse(newHash);
   }
 
+  
+
 
   //setup crossroads
   crossroads.addRoute('/home/:reload:', function(reload){
@@ -85,6 +89,15 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
     });
   });
 
+  crossroads.addRoute('/admin/', function(id){
+    $('#widget-canvas').empty();
+    var el = $('<div>', { "style": "height: 100%;overflow: scroll;"}).appendTo($('#widget-canvas'));
+
+    require(['app/admin-view'], function(admin){
+      admin.render(el);
+    });
+  });
+
   crossroads.addRoute('/train/{id}', function(id){
     $('#widget-canvas').empty();
     var el = $('<div>', { "style": "height: 100%;overflow: scroll;"}).appendTo($('#widget-canvas'));
@@ -92,7 +105,7 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
     require(['app/markup'], function(markup){
       markup.render(el, id);
     });
-  });
+  })
 
   
   crossroads.addRoute('/test/:id:', function(id){
@@ -110,18 +123,38 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
 
   crossroads.bypassed.add(function(req){
     console.log('route not found: ' + req);
-    alert('Error: route not found, go back');
+    //empty request will just redirect to HOME
+    if (req != ""){
+      alert('Error: route not found, go back');
+    }
   });
 
-  //setup hasher
-  //only required if you want to set a default value
-  if(hasher.getHash().length < 1) {
-    hasher.setHash(DEFAULT_HASH);
-  }
-  
   hasher.initialized.add(parseHash); //parse initial hash
   hasher.changed.add(parseHash); //parse hash changes
 
-  hasher.init(); //start listening for hash changes
+
+  var init = function(){
+    hasher.init(); //start listening for hash changes
+
+    if (hasher.getHash().length < 1){
+      hasher.setHash(DEFAULT_HASH);
+    }
+    utils.autosave_interval(data);
+  };
+
+  if (data.trainings().length < 1){
+    $.ajax({
+          url:'data/last_save',
+          type:"GET",
+          contentType:"application/json; charset=utf-8",
+          dataType:"json"
+    }).done(function(resp){
+      console.log('data loaded from prev session');
+      data.bulkload(resp.trainings, resp.filename);
+      init();
+    });
+  } else {
+    init();
+  };
 
 });

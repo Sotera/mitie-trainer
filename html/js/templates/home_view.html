@@ -5,7 +5,10 @@
   <div style="height: 215px;">
     <div style="margin-left: 10px;">
       <div style="display:inline-block;padding-right: 20px;vertical-align: top;">
-        <h4>Training Samples</h4>
+        <h4>Training Samples</h4> 
+        <input type="text" data-bind="value: fileName, style: { display: filenameEditing() ? '' : 'none' }, valueUpdate: 'afterkeydown'"></input>
+       <span data-bind="style: { display: filenameEditing() ? 'none' : '' }, text: fileName">edit</span>
+        <span data-bind="click: toggleFilename" class="glyphicon glyphicon-pencil"></span>
       </div>
     </div>
 
@@ -24,38 +27,60 @@
       <span style="font-size: 54px" data-bind="html: trained"></span>
     </div>
 
-    <div style="display:inline-block;margin-right: 20px;">
+    <!-- <div style="display:inline-block;margin-right: 20px;"> -->
 
-      <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" data-bind="click: train">Train</button>
-      </div>
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <button class="btn btn-default btn-size" data-bind="click: train">Train</button> -->
+    <!--   </div> -->
 
-      <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" data-bind="click: test_handler">Test</button>
-      </div>
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <button class="btn btn-default btn-size" data-bind="click: test_handler">Test</button> -->
+    <!--   </div> -->
       
-      <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" data-bind="click: save">Save Model</button>
-      </div>
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <button class="btn btn-default btn-size" data-bind="click: save">Save Model</button> -->
+    <!--   </div> -->
 
-      <div style="margin-bottom: 12px;">
-        <div style="display: inline-block;padding: 5px;"
-             class="btn-size"
-             data-bind="html: result_msg, css: result_msg_class"> testing  </div>
-      </div>
+    <!--   <div style="margin-bottom: 12px;"> -->
+    <!--     <div style="display: inline-block;padding: 5px;" -->
+    <!--          class="btn-size" -->
+    <!--          data-bind="html: result_msg, css: result_msg_class"> testing  </div> -->
+    <!--   </div> -->
 
-    </div>
+    <!-- </div> -->
     <div style="display:inline-block;margin-right: 20px;vertical-align: top;">
-
-      <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" data-bind="click: training_save">Export Training</button>
-      </div>
 
       <div style="margin-bottom: 12px;">
         <button class="btn btn-default btn-size" data-bind="click: training_upload">Import Training</button>
       </div>
 
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_save_server">Save to Server</button>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_save">Download Training</button>
+      </div>
+
     </div>
+
+    <div style="display:inline-block;margin-right: 20px;vertical-align: top;">
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_complete_handler">Training Complete</button>
+      </div>
+
+      <div style="margin-bottom: 12px;visibility: hidden;">
+        <!-- empty button for spacing -->
+        <button class="btn btn-default btn-size">spacer</button>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: resetTraining">Clear all tags</button>
+      </div>
+
+    </div>
+
   </div>
 
   <hr style="margin-top: 9px; margin-bottom: 10px;" />

@@ -1,7 +1,21 @@
 *.pyc
+
+
+# data directories
 html/data/models/*
 !html/data/models/.keep
+
 html/data/trained/
 !html/data/trained/.keep
+
 html/data/trainings/
 !html/data/trainings/.keep
+
+html/data/auto_saves/*
+!html/data/auto_saves/.keep
+
+html/data/user_saves/*
+!html/data/user_saves/.keep
+
+html/data/complete/*
+!html/data/complete/.keep

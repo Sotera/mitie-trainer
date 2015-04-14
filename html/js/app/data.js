@@ -1,6 +1,7 @@
-define(['underscore-contrib', 'jquery'], function(_, $){
+define(['underscore-contrib', 'jquery', 'ko'], function(_, $, ko){
 
   var data = [];
+  var fileName = ko.observable("training_" +(+new Date) + ".json");
 
   var tokenize = function(sz){
     return sz.split(' ');
@@ -28,6 +29,12 @@ define(['underscore-contrib', 'jquery'], function(_, $){
     data[i].tags = [];
   };
 
+  var clearAllTags = function(){
+    _.each(data, function(item, i){
+      item.tags = [];
+    });
+  };
+
   var removeTag = function(i, start, end){
     data[i].tags = _.filter(data[i].tags, 
                             function(t){
@@ -39,19 +46,12 @@ define(['underscore-contrib', 'jquery'], function(_, $){
     return data;
   };
 
-  var bulkload = function(j){
+  var bulkload = function(j, filename_){
+    if (filename_){
+      fileName(filename_);
+    }
     data = j.slice(0);
   };
-
-  var load = function(){
-    var deferred = new $.Deferred();
-    $.get('data/all', function(resp){
-      data = resp.data;
-      deferred.resolve(data);
-    });
-    return deferred.promise();
-  };
-
 
   return {
     addSample : addSample,
@@ -59,7 +59,8 @@ define(['underscore-contrib', 'jquery'], function(_, $){
     clearTags : clearTags,
     removeTag : removeTag,
     trainings : trainings,
-    init : load,
+    fileName : fileName,
+    clearAllTags : clearAllTags,
     bulkload : bulkload
   }
 });

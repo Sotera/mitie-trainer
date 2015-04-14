@@ -1,16 +1,61 @@
- <div class="markup-container unselectable">
+<div style="padding: 5px; position: absolute;">
+  <div class="btn-group" role="group" data-bind="foreach: entity_types">
+    <button type="button" class="btn btn-default"
+            data-bind="click : $parent.selectedType($data), attr: { 'data-type' : $data.text }, style : { 
+                       'background-color' : $parent.selectedFn($data)
+                       }">
+      <div style="border-bottom-width: 10px; border-bottom-style: solid; text-transform: capitalize;" 
+           data-bind="style : { 'border-bottom-color' : $data.color }, text: $data.text"></div>
+    </button>
+  </div>
+  <div style="padding-top: 10px;">
+    <span> id: </span>
+    <span class="id_field" style="padding-right: 10px;font-weight: bold;"
+    data-bind="text: id"></span>
 
+    <span style="padding: 3px 7px;">- Keyboard Shortcuts: </span>
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> t </span>
+    <span style="padding: 3px 5px;"> tag </span>
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> u </span>
+    <span style="padding: 3px 5px;"> untag </span>
+
+    <span style="padding: 3px 7px;">Switch Type: </span>    
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> ← </span>
+    <span style="padding: 3px 5px;"> Left </span>
+
+    <span style="border: 1px solid black;
+                 padding: 5px 10px;border-radius:
+                 5px;background-color: #eee;"> → </span>
+    <span style="padding: 3px 5px;"> Right </span>
+  </div>
+
+</div>
+
+
+<div tabindex="0" class="markup-container unselectable" style="margin-top: 100px;margin-bottom: 75px;"
+     data-bind="event: { 'keydown': checkKey }">
 </div>
 
 <hr />
 
-
-<div style="margin: 10px;">
+<div style="margin: 10px; position: absolute;bottom: 10px;">
   <div style="margin: 10px;display: inline-block">
-    <button class="btn btn-default" data-bind="click: save">Save</button>
+    <button class="btn btn-primary" data-bind="click: navigate_prev">
+      <span class="glyphicon glyphicon-arrow-left"></span> 
+    </button>
   </div>
   <div style="margin: 10px;display: inline-block">
-    <button class="btn btn-default" data-bind="click: cancel">Cancel</button>
+    <button class="btn btn-primary" data-bind="click: navigate_home">Home</button>
+  </div>
+  <div style="margin: 10px;display: inline-block">
+    <button class="btn btn-primary" data-bind="click: navigate_next">
+      <span class="glyphicon glyphicon-arrow-right"></span> 
+    </button>
   </div>
 </div>
-

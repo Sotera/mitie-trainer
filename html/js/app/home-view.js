@@ -22,14 +22,14 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       .select("thead")
       .append("tr")
       .selectAll("tr")
-      .data(['ID', 'Snippet', 'Trained'])
+      .data(['Index', 'ID', 'Snippet', 'Trained'])
       .enter().append("th").text(_.identity);
 
     var tr = d3.select(el[0]).select("tbody").selectAll("tr")
       .data(rows)
       .enter().append("tr")
       .attr("class", function(d){
-        if (d[2]) return "success";
+        if (d[3]) return "success";
       })
       .on("click", function(d){
         utils.navigate(routes.TRAIN(d[0]))
@@ -48,7 +48,14 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       .data(_.identity)
       .enter().append("td")
       .html(function(d, i){
-        if (i == 2){        
+
+        if (i == 1){
+            return $('<_>').append(
+              $('<span>').html(d.length > 50 ? d.substr(0, 47) + "..." : d).attr('title', d)
+            ).html();          
+        } 
+
+        if (i == 3){        
           if (d) {
             return $('<_>').append(
               $('<span>').addClass('glyphicon').addClass('glyphicon-ok')
@@ -121,7 +128,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       table = ref.find('.table-container');
       table_container(table);
       render_table(table, _.map(data.trainings(), function(d, i){ 
-        return [i, d.text.substr(0, 150), d.tags.length > 0 ];
+        return [i, d.id, d.text.substr(0, 150), d.tags.length > 0 ];
       }));
       var trainingCount = ko.observable(data.trainings().length);
       var trained = ko.observable(_.filter(data.trainings(), function(o){
@@ -139,10 +146,73 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         var evt = document.createEvent("HTMLEvents");
         evt.initEvent("click");
         var el = document.createElement('a');
-        el.download = "test.json";
-        var f = new Blob([JSON.stringify(data.trainings())], {'type': 'application/json'});
+        el.download = data.fileName() ;
+        var f = new Blob([JSON.stringify( {'filename': data.fileName(),'trainings' : data.trainings()})], {'type': 'application/json'});
         el.href = URL.createObjectURL(f);
         el.dispatchEvent(evt);
+      };
+
+      var training_save_server_handler = function(){
+        
+        var filename = prompt("Please enter a file name.", data.fileName());
+        if (filename != null) {
+          if (!utils.strEndsWith(filename, ".json")){
+            filename = filename + ".json";
+          }
+          data.fileName(filename);
+          $.ajax({
+            url:'data/server_save',
+            type:"POST",
+            data:JSON.stringify({ 'name' : filename, 
+                                  'data' : {'filename': filename, 'trainings' : data.trainings() }}),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json"
+          }).done(function(resp){
+            console.log(resp);
+            alert("saved " + "/data/user_saves" + "/" + resp.saved);
+          }).fail(function(){
+            console.log("save failed");
+          });
+        }};
+
+      var training_complete_handler = function(){
+        var verify = _.every(data.trainings(), function(t){
+          return t.tags.length > 0;
+        });
+
+        if (!verify) { 
+          var c = confirm("Not all trainings have been tagged are you sure you want to complete this training?");
+          if (!c){
+            //bail
+            return;
+          }
+        }
+
+        var filename = prompt("Please enter the file name", data.fileName());
+        if (filename != null){
+          if (!utils.strEndsWith(filename, ".json")){
+            filename = filename + ".json";
+          }
+          //update ui filename
+          data.fileName(filename);          
+          // create completed filename
+          filename = filename.replace(/\.json/, '');
+          filename = filename + "_complete.json";
+
+          $.ajax({
+            url:'data/server_save_complete',
+            type:"POST",
+            data:JSON.stringify({ 'name' : filename, 
+                                  'data' : {'filename': filename, 'trainings' : data.trainings() }}),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json"
+          }).done(function(resp){
+            console.log(resp);
+            alert("completed " + "/data/complete" + "/" + resp.saved);
+          }).fail(function(){
+            console.log("save failed");
+          });
+        }
       };
 
       var training_upload = function(){
@@ -155,10 +225,11 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
           // Closure to capture the file information.
           reader.onload = (function (theFile) {
             return function (e) { 
+              var f = theFile.name;
               var JsonObj = e.target.result
               console.log(JsonObj);
               var parsedJSON = JSON.parse(JsonObj);
-              data.bulkload(parsedJSON);
+              data.bulkload(parsedJSON.trainings, f);
               utils.navigate(routes.HOME("reload"));
             };
           })(f);
@@ -172,15 +243,36 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         $("#fileupload").trigger("click"); 
       };
 
+      var fileName = data.fileName;
+      var filenameEditing = ko.observable(false);
+      var toggleFilename = function () { 
+        console.log('toggle')
+        filenameEditing(!filenameEditing()); 
+      };
+
+      var resetTraining = function(){
+        var r = confirm("Are you sure you want to remove all tagged data from the current set?");
+        if (r) {
+          data.clearAllTags();
+          utils.navigate(routes.HOME("reload"));
+        };
+      };
+
       ko.applyBindings({ training_upload: training_upload, 
                          training_save: training_save_handler, 
+                         training_save_server: training_save_server_handler,
+                         training_complete_handler : training_complete_handler,
                          test_handler: navigate_test, 
                          save: save, 
                          train: train, 
                          result_msg: result_msg,
                          result_msg_class: result_msg_class,
                          total: trainingCount, 
-                         trained: trained
+                         trained: trained,
+                         fileName: fileName,
+                         filenameEditing : filenameEditing,
+                         toggleFilename : toggleFilename,
+                         resetTraining : resetTraining
                        }, ref[0])
     });
 

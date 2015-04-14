@@ -8,6 +8,8 @@ html, body {
     padding: 0;
 }
 
+ul.none { list-style-type: none; margin: 0; padding: 0; }
+
 .window-container {
     height: calc(100% - 50px);
     width: 100%;
@@ -87,6 +89,10 @@ html, body {
 }
 
 .table-container > table tbody tr td:nth-child(2) {
+    text-align: left;
+}
+
+.table-container > table tbody tr td:nth-child(3) {
     min-width: 500px;
     text-align: left;
 }
@@ -108,7 +114,7 @@ html, body {
 
 .tag {
     font-weight: bold;
-    display: inline-block;
+    display: inline;
     vertical-align: bottom;    
     margin-right: 2px;
     padding-left: 5px;
@@ -122,9 +128,14 @@ html, body {
 .highlight {
     background-color: yellow;
     font-weight: bold;
-    display: inline-block;
+    display: inline;
     vertical-align: bottom;
 }
+
+div.tag.highlight {
+    border: 1px solid yellow;
+}
+
 
 .highlight>span {
     padding-right: 5px;
