@@ -153,11 +153,13 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       };
 
       var training_save_server_handler = function(){
-        var filename = prompt("Please enter a file name.", "training_" +(+new Date) + ".json");
+        
+        var filename = prompt("Please enter a file name.", data.fileName());
         if (filename != null) {
           if (!utils.strEndsWith(filename, ".json")){
             filename = filename + ".json";
           }
+          data.fileName(filename);
           $.ajax({
             url:'data/server_save',
             type:"POST",
@@ -167,7 +169,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
             dataType:"json"
           }).done(function(resp){
             console.log(resp);
-            alert("saved " + resp.saved);
+            alert("saved " + "/data/user_saves" + "/" + resp.saved);
           }).fail(function(){
             console.log("save failed");
           });
