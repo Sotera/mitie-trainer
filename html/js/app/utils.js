@@ -31,6 +31,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
           contentType:"application/json; charset=utf-8",
           dataType:"json"
         }).done(function(resp){
+          $('#last_save').html(new Date().toTimeString());
           console.log('auto saved ' + resp.saved);
         });
       }
