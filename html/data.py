@@ -9,6 +9,9 @@ from trainer.utils.file import slurp, spit
 WEB_ROOT = cherrypy.config.get("webroot")
 auto_save_dir = "{}/data/auto_saves".format(WEB_ROOT)
 user_save_dir = "{}/data/user_saves".format(WEB_ROOT)
+completed_dir = "{}/data/complete".format(WEB_ROOT)
+
+
 #GET /data/last_save
 def last_save(*args):
     tangelo.content_type("application/json")    
@@ -45,6 +48,21 @@ def server_save(*args, **kwargs):
     tangelo.content_type("application/json")
     return { 'saved': f }
 
+def server_save(*args, **kwargs):
+    f = kwargs.get('name')
+    data = kwargs.get('data')
+    spit("{}/{}".format(user_save_dir, f), json.dumps(data))
+    tangelo.content_type("application/json")
+    return { 'saved': f }
+
+
+def server_save_complete(*args, **kwargs):
+    f = kwargs.get('name')
+    data = kwargs.get('data')
+    spit("{}/{}".format(completed_dir, f), json.dumps(data))
+    tangelo.content_type("application/json")
+    return { 'saved': f }
+
 def save_tags(*args, **kwargs):
     data = kwargs.get('types')
     spit("{}/js/types.json".format(WEB_ROOT), json.dumps({ 'types' : data }), True)
@@ -57,7 +75,8 @@ actions = {
 post_actions = {
     "save_tags" : save_tags,
     "auto_save" : auto_save,
-    "server_save" : server_save
+    "server_save" : server_save,
+    "server_save_complete" : server_save_complete
 }
 
 def unknown(*args):

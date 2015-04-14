@@ -123,7 +123,10 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
 
   crossroads.bypassed.add(function(req){
     console.log('route not found: ' + req);
-    alert('Error: route not found, go back');
+    //empty request will just redirect to HOME
+    if (req != ""){
+      alert('Error: route not found, go back');
+    }
   });
 
   hasher.initialized.add(parseHash); //parse initial hash

@@ -173,8 +173,47 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
           }).fail(function(){
             console.log("save failed");
           });
-
         }};
+
+      var training_complete_handler = function(){
+        var verify = _.every(data.trainings(), function(t){
+          return t.tags.length > 0;
+        });
+
+        if (!verify) { 
+          var c = confirm("Not all trainings have been tagged are you sure you want to complete this training?");
+          if (!c){
+            //bail
+            return;
+          }
+        }
+
+        var filename = prompt("Please enter the file name", data.fileName());
+        if (filename != null){
+          if (!utils.strEndsWith(filename, ".json")){
+            filename = filename + ".json";
+          }
+          //update ui filename
+          data.fileName(filename);          
+          // create completed filename
+          filename = filename.replace(/\.json/, '');
+          filename = filename + "_complete.json";
+
+          $.ajax({
+            url:'data/server_save_complete',
+            type:"POST",
+            data:JSON.stringify({ 'name' : filename, 
+                                  'data' : {'filename': filename, 'trainings' : data.trainings() }}),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json"
+          }).done(function(resp){
+            console.log(resp);
+            alert("completed " + "/data/complete" + "/" + resp.saved);
+          }).fail(function(){
+            console.log("save failed");
+          });
+        }
+      };
 
       var training_upload = function(){
 
@@ -222,6 +261,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       ko.applyBindings({ training_upload: training_upload, 
                          training_save: training_save_handler, 
                          training_save_server: training_save_server_handler,
+                         training_complete_handler : training_complete_handler,
                          test_handler: navigate_test, 
                          save: save, 
                          train: train, 

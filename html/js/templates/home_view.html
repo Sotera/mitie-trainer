@@ -67,11 +67,12 @@
     <div style="display:inline-block;margin-right: 20px;vertical-align: top;">
 
       <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" data-bind="">Training Complete</button>
+        <button class="btn btn-default btn-size" data-bind="click: training_complete_handler">Training Complete</button>
       </div>
 
-      <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" style="visibility: hidden;" data-bind="">Training Complete</button>
+      <div style="margin-bottom: 12px;visibility: hidden;">
+        <!-- empty button for spacing -->
+        <button class="btn btn-default btn-size">spacer</button>
       </div>
 
       <div style="margin-bottom: 12px;">
