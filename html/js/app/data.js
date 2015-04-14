@@ -29,6 +29,12 @@ define(['underscore-contrib', 'jquery', 'ko'], function(_, $, ko){
     data[i].tags = [];
   };
 
+  var clearAllTags = function(){
+    _.each(data, function(item, i){
+      item.tags = [];
+    });
+  };
+
   var removeTag = function(i, start, end){
     data[i].tags = _.filter(data[i].tags, 
                             function(t){
@@ -54,6 +60,7 @@ define(['underscore-contrib', 'jquery', 'ko'], function(_, $, ko){
     removeTag : removeTag,
     trainings : trainings,
     fileName : fileName,
+    clearAllTags : clearAllTags,
     bulkload : bulkload
   }
 });

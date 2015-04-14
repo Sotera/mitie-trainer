@@ -209,6 +209,14 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         filenameEditing(!filenameEditing()); 
       };
 
+      var resetTraining = function(){
+        var r = confirm("Are you sure you want to remove all tagged data from the current set?");
+        if (r) {
+          data.clearAllTags();
+          utils.navigate(routes.HOME("reload"));
+        };
+      };
+
       ko.applyBindings({ training_upload: training_upload, 
                          training_save: training_save_handler, 
                          training_save_server: training_save_server_handler,
@@ -221,7 +229,8 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
                          trained: trained,
                          fileName: fileName,
                          filenameEditing : filenameEditing,
-                         toggleFilename : toggleFilename
+                         toggleFilename : toggleFilename,
+                         resetTraining : resetTraining
                        }, ref[0])
     });
 
