@@ -34,9 +34,9 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
       .on("click", function(d){
         utils.navigate(routes.TRAIN(d[0]))
       })
-      .on("contextmenu", function(d, i){
-        utils.navigate(routes.TEST(d[0]))
-      })
+      // .on("contextmenu", function(d, i){
+      //   utils.navigate(routes.TEST(d[0]))
+      // })
       .on('mouseover', function(d){
         $(this).addClass('hover');
       })
