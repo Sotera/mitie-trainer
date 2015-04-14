@@ -146,8 +146,8 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         var evt = document.createEvent("HTMLEvents");
         evt.initEvent("click");
         var el = document.createElement('a');
-        el.download = "training_export_" +(+new Date) + ".json" ;
-        var f = new Blob([JSON.stringify( {'trainings' : data.trainings()})], {'type': 'application/json'});
+        el.download = data.fileName() ;
+        var f = new Blob([JSON.stringify( {'filename': data.fileName(),'trainings' : data.trainings()})], {'type': 'application/json'});
         el.href = URL.createObjectURL(f);
         el.dispatchEvent(evt);
       };
@@ -162,7 +162,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
             url:'data/server_save',
             type:"POST",
             data:JSON.stringify({ 'name' : filename, 
-                                  'data' : {'trainings' : data.trainings() }}),
+                                  'data' : {'filename': filename, 'trainings' : data.trainings() }}),
             contentType:"application/json; charset=utf-8",
             dataType:"json"
           }).done(function(resp){
@@ -184,10 +184,11 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
           // Closure to capture the file information.
           reader.onload = (function (theFile) {
             return function (e) { 
+              var f = theFile.name;
               var JsonObj = e.target.result
               console.log(JsonObj);
               var parsedJSON = JSON.parse(JsonObj);
-              data.bulkload(parsedJSON.trainings);
+              data.bulkload(parsedJSON.trainings, f);
               utils.navigate(routes.HOME("reload"));
             };
           })(f);
@@ -201,6 +202,13 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
         $("#fileupload").trigger("click"); 
       };
 
+      var fileName = data.fileName;
+      var filenameEditing = ko.observable(false);
+      var toggleFilename = function () { 
+        console.log('toggle')
+        filenameEditing(!filenameEditing()); 
+      };
+
       ko.applyBindings({ training_upload: training_upload, 
                          training_save: training_save_handler, 
                          training_save_server: training_save_server_handler,
@@ -210,7 +218,10 @@ define(['underscore-contrib', 'windows', 'hasher', 'ko', 'd3', 'app/utils', 'app
                          result_msg: result_msg,
                          result_msg_class: result_msg_class,
                          total: trainingCount, 
-                         trained: trained
+                         trained: trained,
+                         fileName: fileName,
+                         filenameEditing : filenameEditing,
+                         toggleFilename : toggleFilename
                        }, ref[0])
     });
 

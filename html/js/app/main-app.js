@@ -147,7 +147,7 @@ requirejs(['underscore-contrib', 'crossroads', 'hasher', 'ko', 'app/main-window'
           dataType:"json"
     }).done(function(resp){
       console.log('data loaded from prev session');
-      data.bulkload(resp.trainings);
+      data.bulkload(resp.trainings, resp.filename);
       init();
     });
   } else {

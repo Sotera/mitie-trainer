@@ -27,7 +27,7 @@ define(['underscore-contrib', 'windows', 'hasher', 'jquery'], function(_, window
         $.ajax({
           url:'data/auto_save',
           type:"POST",
-          data:JSON.stringify({ 'trainings' : data.trainings() }),
+          data:JSON.stringify({'filename': data.fileName(), 'trainings' : data.trainings() }),
           contentType:"application/json; charset=utf-8",
           dataType:"json"
         }).done(function(resp){

@@ -5,7 +5,10 @@
   <div style="height: 215px;">
     <div style="margin-left: 10px;">
       <div style="display:inline-block;padding-right: 20px;vertical-align: top;">
-        <h4>Training Samples</h4>
+        <h4>Training Samples</h4> 
+        <input type="text" data-bind="value: fileName, style: { display: filenameEditing() ? '' : 'none' }, valueUpdate: 'afterkeydown'"></input>
+       <span data-bind="style: { display: filenameEditing() ? 'none' : '' }, text: fileName">edit</span>
+        <span data-bind="click: toggleFilename" class="glyphicon glyphicon-pencil"></span>
       </div>
     </div>
 
@@ -48,15 +51,15 @@
     <div style="display:inline-block;margin-right: 20px;vertical-align: top;">
 
       <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" data-bind="click: training_save">Export Training</button>
-      </div>
-
-      <div style="margin-bottom: 12px;">
         <button class="btn btn-default btn-size" data-bind="click: training_upload">Import Training</button>
       </div>
 
       <div style="margin-bottom: 12px;">
-        <button class="btn btn-default btn-size" data-bind="click: training_save_server">Save Training</button>
+        <button class="btn btn-default btn-size" data-bind="click: training_save_server">Save to Server</button>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-default btn-size" data-bind="click: training_save">Download Training</button>
       </div>
 
     </div>

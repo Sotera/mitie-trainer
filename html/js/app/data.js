@@ -1,6 +1,7 @@
-define(['underscore-contrib', 'jquery'], function(_, $){
+define(['underscore-contrib', 'jquery', 'ko'], function(_, $, ko){
 
   var data = [];
+  var fileName = ko.observable("training_" +(+new Date) + ".json");
 
   var tokenize = function(sz){
     return sz.split(' ');
@@ -39,7 +40,10 @@ define(['underscore-contrib', 'jquery'], function(_, $){
     return data;
   };
 
-  var bulkload = function(j){
+  var bulkload = function(j, filename_){
+    if (filename_){
+      fileName(filename_);
+    }
     data = j.slice(0);
   };
 
@@ -49,6 +53,7 @@ define(['underscore-contrib', 'jquery'], function(_, $){
     clearTags : clearTags,
     removeTag : removeTag,
     trainings : trainings,
+    fileName : fileName,
     bulkload : bulkload
   }
 });
