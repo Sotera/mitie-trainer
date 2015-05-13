@@ -1,7 +1,7 @@
 # mitie-trainer
 
 An interactive, browser-based model training tool for
-[MITIE](https://github.com/mitll/MITIE). The MIT Information Extraction tool
+[MITIE](https://github.com/mit-nlp/MITIE). The MIT Information Extraction tool
 provides fast and easily trained named entity recognition (NER) and binary relation
 extraction abilities and is free for both noncommercial and commercial use.
 This package is a browser-based wrapper on the training tool, allowing for
