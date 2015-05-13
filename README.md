@@ -12,7 +12,7 @@ faster tagging of training data for input into MITIE.
 
 - If it's not already present, install Tangelo v0.6.1 `pip install -Iv tangelo==0.6.1`
 - If not present install config `pip install config` 
-- Install [MITIE](https://github.com/mitll/MITIE)
+- Install [MITIE](https://github.com/mit-nlp/MITIE)
 - Set the path to your MITIE home in **conf/app.cfg**
 
 ### Data
