@@ -20,6 +20,7 @@ def addFileTag(o, tag):
     o['input_file'] = tag
     return o
 
+
 def diffs(items,all_tags):
     a=items[0]
     try:
@@ -33,45 +34,68 @@ def diffs(items,all_tags):
                   +map(lambda o: addFileTag(o, 'B'), b['tags']), key=keyfn)
     
     grouped_tags = itertools.groupby(tags, key=keyfn)
-    
+    all_tags2=list(set(list(set(map(lambda x:x['tag'],a['tags'])))+list(set(map(lambda x:x['tag'],b['tags'])))))
     
     results = []
-    score = dict.fromkeys(all_tags)
-    for tag in all_tags:
+    score = dict.fromkeys(all_tags2)
+    for tag in all_tags2:
         score[str(tag)]={}
         score[str(tag)]['fp']=0
         score[str(tag)]['tp']=0
         score[str(tag)]['fn']=0
         score[str(tag)]['tn']=0
-    for k, g in grouped_tags:
-        
-        items= list(g)
-        if len(items) == 1:
-            if items[0]['input_file']=='A':
-                score[str(items[0]['tag'])]['fn']+=1
+        fp=0
+        tp=0
+        fn=0
+        tn=0
+    
+    for tag in all_tags2:   
+        grouped_tags = itertools.groupby(tags, key=keyfn)
+        for k, g in grouped_tags:
+            items= list(g)
+            if len(items) == 1:
+                if items[0]['input_file']=='A' and items[0]['tag']==tag:
+                    score[str(tag)]['fn']+=1
+                    #print tag,'False Negative', items
+                elif items[0]['input_file']=='B' and items[0]['tag']==tag:
+                    score[str(tag)]['fp']+=1
+                    fp+=1
+                    #print tag,'False Positive',items
+                results.append((_id, '-' if items[0]['input_file'] == 'A' else '+', json.dumps(items[0])))
             else:
-                score[str(items[0]['tag'])]['tn']+=1
-            results.append((_id, '-' if items[0]['input_file'] == 'A' else '+', json.dumps(items[0])))
-        else:
-            if items[0]['tag'] != items[1]['tag']:
-                score[str(items[0]['tag'])]['fp']+=1
-            if items[0]['tag'] == items[1]['tag']:
-                score[str(items[0]['tag'])]['tp']+=1
+                if items[0]['tag'] != items[1]['tag'] and items[0]['tag']==tag:
+                    score[str(tag)]['fn']+=1
+                    #print tag,'False Negative',items
+                    fp+=1
+                if items[0]['tag'] == items[1]['tag'] and items[0]['tag']==tag:
+                    score[str(tag)]['tp']+=1
+                    tp+=1
+                    #print tag,'True Postive', items
+
+    try: 
+        precision=float(tp/(tp+fp))
+    except ZeroDivisionError:
+        precision=0
+    try:
+        recall=float(tp/(tp+fn))
+    except ZeroDivisionError:
+        recall=0
         
-    def scoring(x):
+    def scoring(x,tag):
         try:
            precision=float(x['tp'])/(x['fp']+x['tp'])
 
         except ZeroDivisionError:
             precision=0
         try:
-            recall=float((x['tp'])/(x['tp']+x['fn']))
+            recall=float(x['tp'])/(x['tp']+x['fn'])
         except ZeroDivisionError:
             recall=0
-        return (precision,recall)
         
-    return  {k:scoring(v) for k, v in score.items()}    
-    #return precision,recall
+        return (precision,recall)
+    
+    return  {k:scoring(v,k) for k, v in score.items()}    
+    
 
 
 def analyze(modifications):
@@ -133,15 +157,18 @@ if __name__ == "__main__":
 
     filtered_pairs = filter(lambda x : x[0]['tags']!=[] and x[0]['input_file']=='A' , pairs)
 
-    all_tags=list(set([tag['tag'] for t in fileA['trainings'] for tag in t['tags']]))
+    all_tagsA=list(set([tag['tag'] for t in fileA['trainings'] for tag in t['tags']]))
+    all_tagsB=list(set([tag['tag'] for t in fileB['trainings'] for tag in t['tags']]))
+    all_tags=list(set(all_tagsA+all_tagsB))
     r=map(lambda p: diffs(p,all_tags), filtered_pairs)
 
 
 
     table=[]
     for tag in all_tags:
-          mean_precision=np.mean([i for i,j in  map(lambda x: x[tag],r)])
-          mean_recall=np.mean([j for i,j in  map(lambda x: x[tag],r)])
+          rnew=filter(lambda x: tag in x.keys(),r)
+          mean_precision=np.mean([i for i,j in  map(lambda x: x[tag],rnew)])
+          mean_recall=np.mean([j for i,j in  map(lambda x: x[tag],rnew)])
           f = 2.0* (mean_precision*mean_recall)/(mean_precision+mean_recall)
           if np.isnan(f):
             f=0
@@ -152,7 +179,7 @@ if __name__ == "__main__":
     f = 2.0* (mean_precision*mean_recall)/(mean_precision+mean_recall)
     table.append(['total',"%.3f"%f, "%.3f"%mean_precision, "%.3f"%mean_recall])
 
-    print table
+    #print table
     header=['tag','f1','precision','recall']
     print("{0:<10} {1:<10} {2:<10} {3:<10}".format(*header))
     print("---------------------------------------")
