@@ -3,7 +3,9 @@ import tangelo
 import cherrypy
 import json
 import datetime
+import sys
 
+sys.path.append('.')
 from trainer.utils.file import slurp, spit
 
 WEB_ROOT = cherrypy.config.get("webroot")
